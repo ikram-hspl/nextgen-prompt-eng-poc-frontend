@@ -1,0 +1,10 @@
+/login-page/node_modules/
+/login-page/package-lock.json
+# /login-page/mockup-gallery/.gitignore
+
+
+/hxstudio/mockup-gallery/node_modules/
+/hxstudio/mockup-gallery/package-lock.json
+# /hxstudio/mockup-gallery/.gitignore
+
+.git/

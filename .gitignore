@@ -8,4 +8,9 @@
 /hxstudio/mockup-gallery/.gitignore
 /hxstudio/mockup-gallery/.git
 
+/hxStudio-frontned/node_modules/
+/hxStudio-frontned/package-lock.json
+/hxStudio-frontned/.gitignore
+/hxStudio-frontned/.git
+
 .git/

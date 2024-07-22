@@ -1,17 +1,3 @@
-/login-page/node_modules/
-/login-page/package-lock.json
-/login-page/mockup-gallery/.gitignore
-/login-page/.git
-
-/hxstudio/mockup-gallery/node_modules/
-/hxstudio/mockup-gallery/package-lock.json
-/hxstudio/mockup-gallery/.gitignore
-/hxstudio/mockup-gallery/.git
-
-/hxStudio-frontned/node_modules/
-/hxStudio-frontned/package-lock.json
-/hxStudio-frontned/.gitignore
-/hxStudio-frontned/.git
 
 .git/
 node_modules

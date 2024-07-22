@@ -8,6 +8,7 @@ import ProtectedRoute from './Components/ProtectedRoutes';
 import AuthProvider from './Context/AuthContext';
 import NotFound from './pages/NotFound';
 import AdminDashboard from './pages/AdminDashboard';
+import DashboardLayout from './Components/DashboardLayout';
 
 const App = () => {
   return (
@@ -23,7 +24,9 @@ const App = () => {
           </Route>
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<NotFound />} />
+        {/* <Route path="/temp" element={<DashboardLayout />} /> */}
         </Routes>
+
       </BrowserRouter>
     </AuthProvider>
   );

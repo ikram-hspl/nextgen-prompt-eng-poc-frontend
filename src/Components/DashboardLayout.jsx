@@ -1,30 +1,34 @@
 import React from 'react';
 import { Container, Navbar, Nav, Form, Button, Row, Col, Card, Badge } from 'react-bootstrap';
-import './App.css';
+import './Dashboard.css';
+
+import mockup1 from '../assets/mockup1.JPG';
+import mockup2 from '../assets/mockup2.JPG';
+import mockup3 from '../assets/mockup3.JPG';
 
 const mockups = [
   {
     title: 'HRTech | Benefits',
     description: 'Recommended plans',
-    image: 'mockup1.jpg',
+    image: mockup1,
     tags: ['Mobile', 'Web']
   },
   {
     title: 'HRTech | Benefits',
     description: 'Plan Comparison',
-    image: 'mockup2.jpg',
+    image: mockup2,
     tags: ['Mobile', 'Web']
   },
   {
     title: 'HRTech | Benefits',
     description: 'Benefits Summary',
-    image: 'mockup3.jpg',
+    image: mockup3,
     tags: ['Mobile', 'Web']
   }
   // Add more mockups as needed
 ];
 
-const App = () => {
+const DashboardLayout = () => {
   return (
     <div>
       <Navbar bg="light" expand="lg" className="shadow-sm">
@@ -86,4 +90,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default DashboardLayout;

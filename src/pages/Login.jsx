@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import '../App.css';
 import logo from '../assets/logo.JPG'; // Make sure you have the logo image in the src folder
 import useAuth from '../hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
 
 const Login = () => {
@@ -12,12 +12,12 @@ const Login = () => {
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [generalError, setGeneralError] = useState('');
-    const { user, login } = useContext(AuthContext);
+    const { user, login , isLoggedIn} = useContext(AuthContext);
 
 
     
 
-    if (user) {
+    if (user && isLoggedIn) {
         console.log(user);
         // if (user.roles.includes('admin')) {
         //   return <Navigate to="/admin-dashboard" />;
@@ -124,6 +124,7 @@ const Login = () => {
                                     <Button variant="primary" type="submit" className="w-100">
                                         Login
                                     </Button>
+                                  
                                 </Form>
                             </Card.Body>
                         </Card>

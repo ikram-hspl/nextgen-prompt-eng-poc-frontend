@@ -6,13 +6,20 @@ import { useCookies } from 'react-cookie';
 const useAuth = () => {
   const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = cookies.token;
+    console.log(token)
     if (token) {
       setUser(jwtDecode(token));
+   
+      console.log("user--->",user)
     }
   }, [cookies]);
+
+ 
+
 
   const login = async (email, password) => {
     try {
@@ -22,6 +29,7 @@ const useAuth = () => {
         const { token } = response.data.result;
         setCookie('token', token, { path: '/' });
         setUser(jwtDecode(token));
+        setIsLoggedIn(true);
         console.log(user)
         return Promise.resolve();
       } else {
@@ -38,7 +46,7 @@ const useAuth = () => {
     alert("logged out")
   };
 
-  return { user, login, logout };
+  return { user, login, logout, isLoggedIn };
 };
 
 export default useAuth;

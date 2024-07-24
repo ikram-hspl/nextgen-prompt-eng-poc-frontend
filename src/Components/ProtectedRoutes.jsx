@@ -6,12 +6,15 @@ import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 
 const ProtectedRoute = ({ roles }) => {
-  const { user } = useContext(AuthContext);
+  const { user, isLoggedIn } = useContext(AuthContext);
   const [cookies] = useCookies(['token']);
   const token = cookies.token;
 
   let isAuthenticated = false;
+  
   let userRoles = [];
+
+  console.log("isLoggedIn-->",isLoggedIn)
 
   if (token) {
     try {
@@ -23,7 +26,7 @@ const ProtectedRoute = ({ roles }) => {
     }
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated ||  !isLoggedIn) {
     return <Navigate to="/" />;
   }
 

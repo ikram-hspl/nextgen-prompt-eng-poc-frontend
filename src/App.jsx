@@ -9,10 +9,12 @@ import AuthProvider from './Context/AuthContext';
 import NotFound from './pages/NotFound';
 import AdminDashboard from './pages/AdminDashboard';
 import DashboardLayout from './Components/DashboardLayout';
+import ErrorBoundary from './Context/ErrorBoundry';
 
 const App = () => {
   return (
     <AuthProvider>
+      <ErrorBoundary>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -28,6 +30,7 @@ const App = () => {
         </Routes>
 
       </BrowserRouter>
+      </ErrorBoundary>
     </AuthProvider>
   );
 };

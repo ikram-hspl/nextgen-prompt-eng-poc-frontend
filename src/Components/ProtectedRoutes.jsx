@@ -14,13 +14,13 @@ const ProtectedRoute = ({ roles }) => {
   
   let userRoles = [];
 
-  console.log("isLoggedIn-->",isLoggedIn)
+  // console.log("isLoggedIn-->",isLoggedIn)
 
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
       isAuthenticated = !!decodedToken;
-      userRoles = decodedToken.roles || []; // assuming roles are part of the token payload
+      userRoles = user.role || []; // assuming roles are part of the token payload
     } catch (error) {
       isAuthenticated = false;
     }

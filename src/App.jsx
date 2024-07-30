@@ -21,7 +21,7 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             {/* Uncomment and use this route if you have an AdminPage component */}
-            <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute roles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} />
            
           </Route>
           <Route path="/unauthorized" element={<Unauthorized />} />

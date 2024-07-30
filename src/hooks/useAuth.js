@@ -3,9 +3,13 @@ import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 
+
+
+
 const useAuth = () => {
   const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [token, setToken] = useState(cookies.token || null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -26,10 +30,11 @@ const useAuth = () => {
       const UserName=email;
       const response = await axios.post('https://localhost:7281/api/auth/login', { UserName, password });
       if (response.data.isSuccess) {
-        const { token } = response.data.result;
+        const { token, user } = response.data.result;
         setCookie('token', token, { path: '/' });
-        setUser(jwtDecode(token));
+        setUser(user);
         setIsLoggedIn(true);
+        setToken(token);
         console.log(user)
         return Promise.resolve();
       } else {

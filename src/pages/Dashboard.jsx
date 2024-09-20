@@ -14,10 +14,11 @@ const Dashboard = () => {
   return (
     <div>
       <DashboardLayout />
-
-      <button onClick={handleLogout}>
+      <div className="d-flex justify-content-end me-5">
+      <button className="btn btn-primary" onClick={handleLogout}>
         Logout
       </button>
+      </div>
     </div>
   )
 }

@@ -6,13 +6,15 @@ import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 
 const ProtectedRoute = ({ roles }) => {
-  const { user, isLoggedIn } = useContext(AuthContext);
+  const {  isLoggedIn } = useContext(AuthContext);
   const [cookies] = useCookies(['token']);
   const token = cookies.token;
+  const user = cookies.user;
+  console.log("Protected user-->",user);
 
   let isAuthenticated = false;
   
-  let userRoles = [];
+  let userRoles ;
 
   // console.log("isLoggedIn-->",isLoggedIn)
 
@@ -20,7 +22,7 @@ const ProtectedRoute = ({ roles }) => {
     try {
       const decodedToken = jwtDecode(token);
       isAuthenticated = !!decodedToken;
-      userRoles = user.role || []; // assuming roles are part of the token payload
+      userRoles = user.role ; // assuming roles are part of the token payload
     } catch (error) {
       isAuthenticated = false;
     }
@@ -30,7 +32,9 @@ const ProtectedRoute = ({ roles }) => {
     return <Navigate to="/" />;
   }
 
-  if (roles && !roles.some(role => userRoles.includes(role))) {
+  console.log("bool",roles===userRoles)
+
+  if (!(roles===userRoles)) {
     return <Navigate to="/unauthorized" />;
   }
 

@@ -6,6 +6,9 @@ import useAuth from '../hooks/useAuth';
 import { Link, Navigate } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
 
+import { useCookies } from 'react-cookie';
+
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,17 +16,19 @@ const Login = () => {
     const [passwordError, setPasswordError] = useState('');
     const [generalError, setGeneralError] = useState('');
     const { user, login , isLoggedIn} = useContext(AuthContext);
+    // const loogedInUser = cookies.user;
+
 
 
     
 
     if (user && isLoggedIn) {
-        console.log(user);
-        // if (user.roles.includes('admin')) {
-        //   return <Navigate to="/admin-dashboard" />;
-        // } else {
-        //   return <Navigate to="/dashboard" />;
-        // }
+        console.log("login page USER->>>>>",user);
+        if (user.role === "ADMIN") {
+          return <Navigate to="/admin" />;
+        } else {
+          return <Navigate to="/dashboard" />;
+        }
         return <Navigate to="/dashboard" />
       }
 
@@ -58,9 +63,22 @@ const Login = () => {
         if (valid) {
             try {
                 await login(email, password);
+
                 console.log('Login successful');
+
+                console.log("login page user",loogedInUser)
+                console.log(loogedInUser.role)
+                if(loogedInUser.role==="ADMIN") {
+                <Navigate to="/admin" />
+
+                }
+
+                else {
+                    <Navigate to="/dashboard" />;
+
+                }
+                
                 // Redirect to a protected route or homepage after successful login
-                <Navigate to="/dashboard" />;
             } catch (error) {
                 setGeneralError(error);
             }

@@ -8,8 +8,10 @@ import ProtectedRoute from './Components/ProtectedRoutes';
 import AuthProvider from './Context/AuthContext';
 import NotFound from './pages/NotFound';
 import AdminDashboard from './pages/AdminDashboard';
-import DashboardLayout from './Components/DashboardLayout';
+// import DashboardLayout from './Components/DashboardLayout';
 import ErrorBoundary from './Context/ErrorBoundry';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const App = () => {
   return (
@@ -18,10 +20,17 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+          <Route element={<ProtectedRoute roles = {"USER"}/>}>
+
+          <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+
+
+          <Route element={<ProtectedRoute roles = {"ADMIN"}/>}>
             {/* Uncomment and use this route if you have an AdminPage component */}
-            <Route path="/admin" element={<ProtectedRoute roles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin" element={<Dashboard />} />
+
+            {/* <Route path="/admin" element={<ProtectedRoute roles="ADMIN"><AdminDashboard /></ProtectedRoute>} /> */}
            
           </Route>
           <Route path="/unauthorized" element={<Unauthorized />} />

@@ -14,9 +14,14 @@ const useAuth = () => {
 
   useEffect(() => {
     const token = cookies.token;
+    const tokenUser = cookies.user;
+    console.log("token user",tokenUser)
     console.log(token)
     if (token) {
-      setUser(jwtDecode(token));
+      setUser(tokenUser);
+      setIsLoggedIn(true);
+    console.log("useeffect user",user)
+
    
       console.log("user--->",user)
     }
@@ -31,7 +36,9 @@ const useAuth = () => {
       const response = await axios.post('https://localhost:7281/api/auth/login', { UserName, password });
       if (response.data.isSuccess) {
         const { token, user } = response.data.result;
+        console.log("login user--->",user)
         setCookie('token', token, { path: '/' });
+        setCookie('user',user, {path: "/"});
         setUser(user);
         setIsLoggedIn(true);
         setToken(token);
@@ -47,6 +54,8 @@ const useAuth = () => {
 
   const logout = () => {
     removeCookie('token', { path: '/' });
+    removeCookie('user', { path: '/' });
+
     setUser(null);
     alert("logged out")
   };

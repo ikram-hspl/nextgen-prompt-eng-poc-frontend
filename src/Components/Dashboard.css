@@ -1,34 +1,173 @@
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;
-  }
+/* Main CSS file for Dashboard Layout */
+/* Container for the search input and button */
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+ 
+}
+
+/* Label styling */
+.search-container label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #dc3545; /* Red color as seen in the image */
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Input styling */
+.search-container input[type="text"] {
+  flex: 1;
+  padding: 15px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
   
-  .navbar {
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
+}
+
+/* Placeholder text styling */
+.search-container input[type="text"]::placeholder {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Button styling */
+.search-container button {
+  padding: 15px 30px;
+  background-color: #6c63ff; /* Purple color as seen in the image */
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   
+}
+
+.search-container button:hover {
+  background-color: #5a54d6;
+}
+
+/* Search Form */
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  position: relative;
+}
+.search-form .form-control {
+  width: 60%;
+  border-radius: 20px;
+  padding: 10px 20px;
+  border: 1px solid #ced4da;
+}
+
+.search-form .search-button {
+  margin-left: 874px;
+  background-color: #6c63ff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.filters-toolbar {
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-button {
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-right: 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  font-weight: bold;
+  color: #495057;
+}
+
+.filter-button.active {
+  background-color: #6c63ff;
+  color: white;
+  border-color: #6c63ff;
+}
+
+.favorite-button {
+  border-radius: 20px;
+  padding: 8px 15px;
+  margin-right: 10px;
+  background-color: #6c63ff;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
+.sort-dropdown .dropdown-toggle {
+  border-radius: 20px;
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  color: #495057;
+}
+
+.mockup-card {
+  transition: transform 0.2s;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.icon-button {
+  color: #6c63ff;
+  transition: color 0.3s ease;
+}
+
+.icon-button:hover {
+  color: #5a54d6;
+}
+.mockup-card:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 1199px) {
+  .filters-toolbar {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 991px) {
   .mockup-card {
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    margin-bottom: 20px;
   }
-  
-  .mockup-card img {
-    width: 100%;
-    border-radius: 10px;
+}
+
+@media (max-width: 767px) {
+  .mockup-card {
+    margin-bottom: 15px;
   }
-  
-  .mockup-card h5 {
-    margin-top: 15px;
-    font-size: 18px;
-    font-weight: 500;
+}
+
+@media (max-width: 575px) {
+  .mockup-card {
+    margin-bottom: 10px;
   }
-  
-  .mockup-card p {
-    font-size: 14px;
-    color: #666;
-  }
-  
+}
+
+
+
+

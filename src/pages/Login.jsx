@@ -90,16 +90,16 @@ const Login = () => {
             <Container fluid className="login-container">
                 <Row className="justify-content-md-center">
                     <Col md={12}>
-                        <Card className="login-card">
+                        <Card className='login-card-border'>
                             <Card.Body>
                                 <div className="text-center mb-4">
                                     <img src={logo} alt="HX Studio Logo" className="logo" />
                                 </div>
-                                <h4 className="text-center mb-4">Login into Your Account</h4>
+                                <h4 className="text-center mb-4 login-text">Please login using your account</h4>
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group controlId="formBasicEmail">
-                                        <Form.Label>Email ID*</Form.Label>
-                                        <Form.Control
+                                        <Form.Label className='login-input'>USERNAME</Form.Label>
+                                        <Form.Control className='login-usertext'
                                             type="email"
                                             placeholder="yourname@harbingergroup.com"
                                             value={email}
@@ -112,25 +112,29 @@ const Login = () => {
                                     </Form.Group>
 
                                     <Form.Group controlId="formBasicPassword" className="mt-3">
-                                        <Form.Label>Password*</Form.Label>
+                                        <Form.Label className='login-input'>PASSWORD</Form.Label>
                                         <Form.Control
                                             type="password"
                                             placeholder="**************"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             isInvalid={!!passwordError}
+                                            className='login-usertext'
                                         />
                                         <Form.Control.Feedback type="invalid">
                                             {passwordError}
                                         </Form.Control.Feedback>
                                     </Form.Group>
 
-                                    <Form.Group controlId="formBasicCheckbox" className="mt-3">
+                                    <button className="w-100 login-button">Login</button>
+                                    <div className="d-flex justify-content-between align-items-center mt-3">
+                                    <Form.Group controlId="formBasicCheckbox" >
                                         <Form.Check type="checkbox" label="Keep me signed in" />
                                     </Form.Group>
 
-                                    <div className="text-right mt-2 mb-3">
+                                    <div className="text-right">
                                         <a href="#" className="forgot-password">Forgot Password?</a>
+                                    </div>
                                     </div>
 
                                     {generalError && (
@@ -139,9 +143,7 @@ const Login = () => {
                                         </div>
                                     )}
 
-                                    <Button variant="primary" type="submit" className="w-100">
-                                        Login
-                                    </Button>
+                                    
                                   
                                 </Form>
                             </Card.Body>

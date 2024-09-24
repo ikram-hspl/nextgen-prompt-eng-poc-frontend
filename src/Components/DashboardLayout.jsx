@@ -283,9 +283,9 @@ const DashboardLayout = () => {
 
         <Row className="mt-4">
           {mockups.map(mockup => (
-            <Col sm={4} key={mockup.id} className="mb-3">
-              <Card>
-                <Card.Img variant="top" src={mockup.image}  />
+            <Col sm={3} key={mockup.id} className="mb-3">
+              <Card className='template-card'>
+                <Card.Img className='template-img' variant="top" src={mockup.image}  />
                 <Card.Body>
                   <Card.Title>{mockup.title}</Card.Title>
                   <Card.Text>{mockup.description}</Card.Text>
@@ -305,7 +305,7 @@ const DashboardLayout = () => {
         ))}
       </ListGroup>
 
-                  <div className="mt-2 d-flex justify-content-between">
+                  {/* <div className="mt-2 d-flex justify-content-between">
                     <IconButton onClick={() => handleDownload(mockup)}>
                       <DownloadIcon />
                     </IconButton>
@@ -315,7 +315,7 @@ const DashboardLayout = () => {
                     <IconButton onClick={() => handleDelete(mockup)}>
                       <DeleteIcon />
                     </IconButton>
-                  </div>
+                  </div> */}
                 </Card.Body>
               </Card>
             </Col>

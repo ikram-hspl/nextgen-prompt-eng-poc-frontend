@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
 import { useCookies } from 'react-cookie';
-
-
-
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
@@ -15,34 +11,23 @@ const useAuth = () => {
   useEffect(() => {
     const token = cookies.token;
     const tokenUser = cookies.user;
-    console.log("token user",tokenUser)
-    console.log(token)
     if (token) {
       setUser(tokenUser);
       setIsLoggedIn(true);
-    console.log("useeffect user",user)
-
-   
-      console.log("user--->",user)
     }
   }, [cookies]);
 
- 
-
-
   const login = async (email, password) => {
     try {
-      const UserName=email;
+      const UserName = email;
       const response = await axios.post('https://localhost:7281/api/auth/login', { UserName, password });
       if (response.data.isSuccess) {
         const { token, user } = response.data.result;
-        console.log("login user--->",user)
         setCookie('token', token, { path: '/' });
-        setCookie('user',user, {path: "/"});
+        setCookie('user', user, { path: '/' });
         setUser(user);
         setIsLoggedIn(true);
         setToken(token);
-        console.log(user)
         return Promise.resolve();
       } else {
         return Promise.reject(response.data.message || 'Login failed');
@@ -55,9 +40,8 @@ const useAuth = () => {
   const logout = () => {
     removeCookie('token', { path: '/' });
     removeCookie('user', { path: '/' });
-
     setUser(null);
-    alert("logged out")
+    setIsLoggedIn(false);
   };
 
   return { user, login, logout, isLoggedIn };

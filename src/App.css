@@ -48,7 +48,6 @@
 }
 
 .login-container .forgot-password {
-  display: block;
   text-align: right;
   color: #6418C3;
   text-decoration: underline;
@@ -121,4 +120,19 @@ opacity: 1;
 
 .login-button:hover {
   background-color: #6C67E1; /* Slightly darker purple on hover */
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  cursor: pointer;
+  font-size: 1.2rem; /* Adjust the size of the icon if needed */
+  color: #6418C3; /* Eye icon color */
+}
+
+.login-usertext-password{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 2px dashed #6418C3;
+  opacity: 1;
 }

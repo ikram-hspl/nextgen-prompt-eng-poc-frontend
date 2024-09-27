@@ -144,6 +144,10 @@
   transform: scale(1.05);
 }
 
+.textBoxParentContainer {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
 @media (max-width: 1199px) {
   .filters-toolbar {
     flex-direction: column;

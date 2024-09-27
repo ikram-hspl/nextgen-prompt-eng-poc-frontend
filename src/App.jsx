@@ -20,7 +20,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route element={<ProtectedRoute roles = {"USER"}/>}>
+          <Route>
 
           <Route path="/dashboard" element={<Dashboard />} />
           </Route>

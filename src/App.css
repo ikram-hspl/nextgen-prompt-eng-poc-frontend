@@ -136,3 +136,15 @@ opacity: 1;
   border: 2px dashed #6418C3;
   opacity: 1;
 }
+
+.template-card{
+ background: #FFFFFF 0% 0% no-repeat padding-box;
+ box-shadow: 0px 4px 4px #0000000A;
+ opacity: 1;
+ border: none !important;
+}
+
+.template-card .template-img{
+  border-radius: 14px 14px 0px 0px;
+  opacity: 0.91;
+}

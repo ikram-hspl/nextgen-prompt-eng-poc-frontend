@@ -26,13 +26,13 @@ const NavbarComponent = ({ setMockups }) => {
         axios.get(`https://localhost:7231/api/FileUploadAPI/search?userId=D96C72A5-990B-497A-974A-14611C77EDB0&query=${searchQuery}`)
           .then(response => {
             const searchResults = response.data.map(mockup => ({
-              id: mockup.id,
-              title: `${mockup.domainname} | ${mockup.subdomainname}`,
-              description: mockup.name,
-              image: mockup.filePath,
-              tags: mockup.tags,
-              domainname: mockup.domainname,
-              subdomainname: mockup.subdomainname
+                id: mockup.id,
+                title: mockup.projectTitle,
+                description: mockup.projectDescription,
+                images: mockup.mockups.map(m => m.filePath),
+                tags: mockup.tags.map(tag => tag.name),
+                domainname: mockup.domain.name,
+                subdomainname: mockup.subdomain.name
             }));
             setMockups(searchResults);
           })

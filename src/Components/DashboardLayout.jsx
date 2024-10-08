@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Container, Navbar, Nav, Form, Button, Row, Col, Card, Badge, DropdownButton, Dropdown, Modal, ListGroup
+  Container, Navbar, Nav, Form, Button, Row, Col, Card, Badge, DropdownButton, Dropdown, Modal, ListGroup, Carousel
 } from 'react-bootstrap';
 import axios from 'axios';
 import './Dashboard.css';
@@ -41,14 +41,15 @@ const DashboardLayout = () => {
   const fetchMockups = () => {
     axios.get('https://localhost:7231/api/FileUploadAPI/D96C72A5-990B-497A-974A-14611C77EDB0/mockups')
       .then(response => {
+        console.log(response);
         const fetchedMockups = response.data.map(mockup => ({
           id: mockup.id,
-          title: `${mockup.domainname} | ${mockup.subdomainname}`,
-          description: mockup.name,
-          image: mockup.filePath,
-          tags: mockup.tags,
-          domainname: mockup.domainname,
-          subdomainname: mockup.subdomainname
+          title: mockup.projectTitle,
+          description: mockup.projectDescription,
+          images: mockup.mockups.map(m => m.filePath),
+          tags: mockup.tags.map(tag => tag.name),
+          domainname: mockup.domain.name,
+          subdomainname: mockup.subdomain.name
         }));
         setMockups(fetchedMockups);
       })
@@ -88,12 +89,12 @@ const DashboardLayout = () => {
       .then(response => {
         const sortedMockups = response.data.map(mockup => ({
           id: mockup.id,
-          title: `${mockup.domainname} | ${mockup.subdomainname}`,
-          description: mockup.name,
-          image: mockup.filePath,
-          tags: mockup.tags,
-          domainname: mockup.domainname,
-          subdomainname: mockup.subdomainname
+          title: mockup.projectTitle,
+          description: mockup.projectDescription,
+          images: mockup.mockups.map(m => m.filePath),
+          tags: mockup.tags.map(tag => tag.name),
+          domainname: mockup.domain.name,
+          subdomainname: mockup.subdomain.name
         }));
         setMockups(sortedMockups);
       })
@@ -107,12 +108,12 @@ const DashboardLayout = () => {
       .then(response => {
         const filteredMockups = response.data.map(mockup => ({
           id: mockup.id,
-          title: `${mockup.domainname} | ${mockup.subdomainname}`,
-          description: mockup.name,
-          image: mockup.filePath,
-          tags: mockup.tags,
-          domainname: mockup.domainname,
-          subdomainname: mockup.subdomainname
+          title: mockup.projectTitle,
+          description: mockup.projectDescription,
+          images: mockup.mockups.map(m => m.filePath),
+          tags: mockup.tags.map(tag => tag.name),
+          domainname: mockup.domain.name,
+          subdomainname: mockup.subdomain.name
         }));
         setMockups(filteredMockups);
       })
@@ -139,7 +140,7 @@ const DashboardLayout = () => {
       Tags: mockup.tags || [],
       Domainname: mockup.domainname,
       Subdomainname: mockup.subdomainname,
-      Image: mockup.image
+      Image: mockup.images[0] // Assuming the first image is the main image
     });
     setUpdateModalShow(true);
   };
@@ -202,81 +203,51 @@ const DashboardLayout = () => {
     <div>
       <NavbarComponent setMockupResults={setMockups} />
       <Container style={{ marginTop: '60px' }}>
-        {/* <Form onSubmit={handleSearchSubmit}>
-          <Form.Group as={Row} controlId="formSearch">
-            <Col sm={8}>
-            <Form.Label><b>Keyword</b></Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Type your keyword here..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-            </Col>
-            <Col sm={4} className="d-flex align-items-end">
-              <Button variant="primary" type="submit">Search</Button>
-            </Col>
-          </Form.Group>
-        </Form> */}
-          <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
-            <div className="d-flex flex-wrap">
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('All')}>All</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Mobile')}>Mobile</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Moodle')}>Moodle</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('WordPress')}>WordPress</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Analytics')}>Analytics</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HRTech')}>HRTech</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('EdTech')}>EdTech</Button>
-              <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HealthTech')}>HealthTech</Button>
-            </div>
-            <div className="d-flex align-items-center">
-              <Button variant="outline-primary" className="me-2">My Favorite</Button>
-              <DropdownButton id="dropdown-basic-button" title={sortOption} className="me-2">
-                <Dropdown.Item onClick={() => handleSortSelect('Alphabetically')}>Alphabetically</Dropdown.Item>
-                <Dropdown.Item onClick={() => handleSortSelect('Recent')}>Recent</Dropdown.Item>
-              </DropdownButton>
-            </div>
+        <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
+          <div className="d-flex flex-wrap">
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('All')}>All</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Mobile')}>Mobile</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Moodle')}>Moodle</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('WordPress')}>WordPress</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Analytics')}>Analytics</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HRTech')}>HRTech</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('EdTech')}>EdTech</Button>
+            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HealthTech')}>HealthTech</Button>
           </div>
-          <Row className="mt-4">
-            {mockups.map(mockup => (
-              <Col sm={3} key={mockup.id} className="mb-3">
-                <Card className='template-card'>
-                  <Card.Img className='template-img' variant="top" src={mockup.image} />
-                  <Card.Body>
-                    <Card.Title>{mockup.title}</Card.Title>
-                    <Card.Text>{mockup.description}</Card.Text>
-                    {/* <ListGroup className="list-group-flush">
-                      {mockup.tags.map(tag => (
-                        <ListGroup.Item key={tag}>
-                          <Badge bg="secondary">{tag}</Badge>
-                        </ListGroup.Item>
-                      ))}
-                    </ListGroup> */}
-
-                    <ListGroup className="list-group-flush d-flex flex-row flex-wrap">
-                      {mockup.tags.map(tag => (
-                        <ListGroup.Item key={tag} className="border-0 p-0 me-2">
-                          <Badge bg="secondary">{tag}</Badge>
-                        </ListGroup.Item>
-                      ))}
-                    </ListGroup>
-
-                    {/* <div className="mt-2 d-flex justify-content-between">
-                      <IconButton onClick={() => handleDownload(mockup)}>
-                        <DownloadIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleUpdate(mockup)}>
-                        <UpdateIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleDelete(mockup)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </div> */}
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+          <div className="d-flex align-items-center">
+            <Button variant="outline-primary" className="me-2">My Favorite</Button>
+            <DropdownButton id="dropdown-basic-button" title={sortOption} className="me-2">
+              <Dropdown.Item onClick={() => handleSortSelect('Alphabetically')}>Alphabetically</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleSortSelect('Recent')}>Recent</Dropdown.Item>
+            </DropdownButton>
+          </div>
+        </div>
+        <Row className="mt-4">
+          {mockups.map(mockup => (
+            <Col sm={3} key={mockup.id} className="mb-3">
+              <Card className='template-card'>
+                <Carousel>
+                  {mockup.images.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <img className="d-block w-100" src={image} alt={`Slide ${index}`} />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+                <Card.Body>
+                  <Card.Title>{mockup.domainname}| {mockup.subdomainname}</Card.Title>
+                  <Card.Text>{mockup.title}</Card.Text>
+                  <ListGroup className="list-group-flush d-flex flex-row flex-wrap">
+                    {mockup.tags.map(tag => (
+                      <ListGroup.Item key={tag} className="border-0 p-0 me-2">
+                        <Badge bg="secondary">{tag}</Badge>
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
       <UploadMockupModal show={show} handleClose={handleClose} handleUpload={handleUpload} />
       <Modal show={updateModalShow} onHide={() => setUpdateModalShow(false)}>

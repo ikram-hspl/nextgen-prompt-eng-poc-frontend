@@ -120,6 +120,7 @@ const DashboardLayout = () => {
       })
       .catch(error => {
         console.error('Error fetching filtered mockups:', error);
+        setMockups([]);
       });
   };
 

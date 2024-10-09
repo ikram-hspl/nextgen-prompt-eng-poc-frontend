@@ -33,3 +33,18 @@ code {
   margin-bottom: 0;
 }
 
+.carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  /* UI Properties */
+border: 1px solid #FFFFFF;
+background: transparent;
+opacity: 1;
+}
+
+.carousel-indicators .active {
+background: #FFFFFF 0% 0% no-repeat padding-box;
+border: 1px solid #FFFFFF;
+opacity: 1;
+}

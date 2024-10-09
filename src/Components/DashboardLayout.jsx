@@ -10,12 +10,14 @@ import UpdateIcon from '@mui/icons-material/Update';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UploadMockupModal from './UploadMockupModal';
 import NavbarComponent from './Navbar';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const DashboardLayout = () => {
   const [show, setShow] = useState(false);
   const [mockups, setMockups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortOption, setSortOption] = useState('Sort By');
+  const [sortOption, setSortOption] = useState('');
   const [updateModalShow, setUpdateModalShow] = useState(false);
   const [selectedMockup, setSelectedMockup] = useState(null);
   const [updateForm, setUpdateForm] = useState({
@@ -41,7 +43,6 @@ const DashboardLayout = () => {
   const fetchMockups = () => {
     axios.get('https://localhost:7231/api/FileUploadAPI/D96C72A5-990B-497A-974A-14611C77EDB0/mockups')
       .then(response => {
-        console.log(response);
         const fetchedMockups = response.data.map(mockup => ({
           id: mockup.id,
           title: mockup.projectTitle,
@@ -201,7 +202,7 @@ const DashboardLayout = () => {
 
   return (
     <div>
-      <NavbarComponent setMockupResults={setMockups} />
+      <NavbarComponent setMockups={setMockups} />
       <Container style={{ marginTop: '60px' }}>
         <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
           <div className="d-flex flex-wrap">
@@ -215,12 +216,19 @@ const DashboardLayout = () => {
             <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HealthTech')}>HealthTech</Button>
           </div>
           <div className="d-flex align-items-center">
-            <Button variant="outline-primary" className="me-2">My Favorite</Button>
-            <DropdownButton id="dropdown-basic-button" title={sortOption} className="me-2">
-              <Dropdown.Item onClick={() => handleSortSelect('Alphabetically')}>Alphabetically</Dropdown.Item>
-              <Dropdown.Item onClick={() => handleSortSelect('Recent')}>Recent</Dropdown.Item>
-            </DropdownButton>
-          </div>
+      <Button variant="outline-secondary" className="me-2 d-flex align-items-center">
+        <GetAppIcon fontSize="small" className="me-2" />
+        Create PDF
+      </Button>
+      <Dropdown>
+      <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">Sort By {sortOption}</Dropdown.Toggle>
+ 
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => handleSortSelect('Alphabetically')}>Alphabetically</Dropdown.Item>
+          <Dropdown.Item onClick={() => handleSortSelect('Recent')}>Recent</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
         </div>
         <Row className="mt-4">
           {mockups.map(mockup => (

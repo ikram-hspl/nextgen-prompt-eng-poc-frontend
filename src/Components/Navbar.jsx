@@ -23,7 +23,10 @@ const NavbarComponent = ({ setMockups }) => {
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        axios.get(`https://localhost:7231/api/FileUploadAPI/search?userId=D96C72A5-990B-497A-974A-14611C77EDB0&query=${searchQuery}`)
+        const url = searchQuery
+      ? `https://localhost:7231/api/FileUploadAPI/search?userId=D96C72A5-990B-497A-974A-14611C77EDB0&query=${searchQuery}`
+      : `https://localhost:7231/api/FileUploadAPI/D96C72A5-990B-497A-974A-14611C77EDB0/mockups`;
+        axios.get(url)
           .then(response => {
             const searchResults = response.data.map(mockup => ({
                 id: mockup.id,

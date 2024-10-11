@@ -29,6 +29,8 @@ const DashboardLayout = () => {
     Subdomainname: '',
     Image: ''
   });
+  const [selectedMockups, setSelectedMockups] = useState([]);
+  const [activeButton, setActiveButton] = useState('');
 
   // Fetch mockups on component mount
   useEffect(() => {
@@ -109,6 +111,7 @@ const DashboardLayout = () => {
   };
 
   const handleDomainFilter = (domainName) => {
+    setActiveButton(domainName);
     axios.get(`https://localhost:7231/api/FileUploadAPI/searchByDomain?userId=${user.id}&domainName=${domainName}`)
       .then(response => {
         const filteredMockups = response.data.map(mockup => ({
@@ -205,44 +208,63 @@ const DashboardLayout = () => {
     console.log('Download clicked for', mockup);
   };
 
+  const handleCheckboxChange = (e, mockupId) => {
+    e.stopPropagation();
+    setSelectedMockups(prevSelected => {
+      if (prevSelected.includes(mockupId)) {
+        return prevSelected.filter(id => id !== mockupId);
+      } else {
+        return [...prevSelected, mockupId];
+      }
+    });
+  };
+
   return (
     <div>
       <NavbarComponent setMockups={setMockups} />
       <Container style={{ marginTop: '60px' }}>
         <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
           <div className="d-flex flex-wrap">
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('All')}>All</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Mobile')}>Mobile</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Moodle')}>Moodle</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('WordPress')}>WordPress</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('Analytics')}>Analytics</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HRTech')}>HRTech</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('EdTech')}>EdTech</Button>
-            <Button variant="outline-secondary" className="me-2" onClick={() => handleDomainFilter('HealthTech')}>HealthTech</Button>
+            {['All', 'Mobile', 'Moodle', 'WordPress', 'Analytics', 'HRTech', 'EdTech', 'HealthTech'].map(domain => (
+              <Button
+                key={domain}
+                variant="outline-secondary"
+                className={`me-2 ${activeButton === domain ? 'active-button' : ''}`}
+                onClick={() => handleDomainFilter(domain)}
+              >
+                {domain}
+              </Button>
+            ))}
           </div>
           <div className="d-flex align-items-center">
-      <Button variant="outline-secondary" className="me-2 d-flex align-items-center">
-        <GetAppIcon fontSize="small" className="me-2" />
-        Create PDF
-      </Button>
-      <Dropdown>
-      <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">Sort By {sortOption}</Dropdown.Toggle>
- 
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => handleSortSelect('Alphabetically')}>Alphabetically</Dropdown.Item>
-          <Dropdown.Item onClick={() => handleSortSelect('Recent')}>Recent</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </div>
+            <Button variant="outline-secondary" className="me-2 d-flex align-items-center">
+              <GetAppIcon fontSize="small" className="me-2" />
+              Create PDF
+            </Button>
+            <Dropdown>
+              <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">Sort By {sortOption}</Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => handleSortSelect('Alphabetically')}>Alphabetically</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleSortSelect('Recent')}>Recent</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
         </div>
         <Row className="mt-4">
           {mockups.map(mockup => (
             <Col sm={3} key={mockup.id} className="mb-3">
               <Card className='template-card'>
+                <div className="checkbox-container">
+                  <Form.Check 
+                    type="checkbox" 
+                    checked={selectedMockups.includes(mockup.id)} 
+                    onChange={(e) => handleCheckboxChange(e, mockup.id)} 
+                  />
+                </div>
                 <Carousel>
                   {mockup.images.map((image, index) => (
                     <Carousel.Item key={index}>
-                      <img className="d-block w-100" src={image} alt={`Slide ${index}`} />
+                      <img className="d-block w-100 cardImg" src={image} alt={`Slide ${index}`} />
                     </Carousel.Item>
                   ))}
                 </Carousel>

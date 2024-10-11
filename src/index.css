@@ -43,6 +43,10 @@ background: transparent;
 opacity: 1;
 }
 
+.carousel {
+  pointer-events: auto; /* Prevent carousel from handling pointer events */
+}
+
 .carousel-indicators .active {
 background: #FFFFFF 0% 0% no-repeat padding-box;
 border: 1px solid #FFFFFF;

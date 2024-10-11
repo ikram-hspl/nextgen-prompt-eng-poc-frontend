@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   Container, Navbar, Nav, Form, Button, Row, Col, Card, Badge, DropdownButton, Dropdown, Modal, ListGroup, Carousel
 } from 'react-bootstrap';
@@ -12,8 +12,10 @@ import UploadMockupModal from './UploadMockupModal';
 import NavbarComponent from './Navbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { AuthContext } from '../Context/AuthContext';
 
 const DashboardLayout = () => {
+  const { user } = useContext(AuthContext);
   const [show, setShow] = useState(false);
   const [mockups, setMockups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,8 +32,10 @@ const DashboardLayout = () => {
 
   // Fetch mockups on component mount
   useEffect(() => {
-    fetchMockups();
-  }, []);
+    if (user) {
+      fetchMockups(user.id);
+    }
+  }, [user]);
 
   // Sort mockups based on selected option
   useEffect(() => {
@@ -40,8 +44,8 @@ const DashboardLayout = () => {
     }
   }, [sortOption]);
 
-  const fetchMockups = () => {
-    axios.get('https://localhost:7231/api/FileUploadAPI/D96C72A5-990B-497A-974A-14611C77EDB0/mockups')
+  const fetchMockups = (userId) => {
+    axios.get(`https://localhost:7231/api/FileUploadAPI/${userId}/mockups`)
       .then(response => {
         const fetchedMockups = response.data.map(mockup => ({
           id: mockup.id,
@@ -81,9 +85,9 @@ const DashboardLayout = () => {
     setSortOption(sort);
     let apiUrl;
     if (sort === 'Alphabetically') {
-      apiUrl = 'https://localhost:7231/api/FileUploadAPI/alphabetical?userId=D96C72A5-990B-497A-974A-14611C77EDB0';
+      apiUrl = `https://localhost:7231/api/FileUploadAPI/alphabetical?userId=${user.id}`;
     } else {
-      apiUrl = 'https://localhost:7231/api/FileUploadAPI/recent?userId=D96C72A5-990B-497A-974A-14611C77EDB0';
+      apiUrl = `https://localhost:7231/api/FileUploadAPI/recent?userId=${user.id}`;
     }
 
     axios.get(apiUrl)
@@ -105,7 +109,7 @@ const DashboardLayout = () => {
   };
 
   const handleDomainFilter = (domainName) => {
-    axios.get(`https://localhost:7231/api/FileUploadAPI/searchByDomain?userId=D96C72A5-990B-497A-974A-14611C77EDB0&domainName=${domainName}`)
+    axios.get(`https://localhost:7231/api/FileUploadAPI/searchByDomain?userId=${user.id}&domainName=${domainName}`)
       .then(response => {
         const filteredMockups = response.data.map(mockup => ({
           id: mockup.id,
@@ -186,7 +190,7 @@ const DashboardLayout = () => {
         }
       })
         .then(() => {
-          fetchMockups(); // Refresh the page by re-fetching mockups
+          fetchMockups(user.id); // Refresh the page by re-fetching mockups
           setUpdateModalShow(false);
           alert('Mockup updated successfully');
         })

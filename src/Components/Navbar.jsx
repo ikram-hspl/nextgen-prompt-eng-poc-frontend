@@ -8,7 +8,7 @@ import Avatar from '../assets/avatar.png';
 import { Navigate } from 'react-router-dom';
 
 const NavbarComponent = ({ setMockups }) => {
-    const { logout } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [selectedTab, setSelectedTab] = useState('visual-samples');
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -24,8 +24,8 @@ const NavbarComponent = ({ setMockups }) => {
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         const url = searchQuery
-      ? `https://localhost:7231/api/FileUploadAPI/search?userId=D96C72A5-990B-497A-974A-14611C77EDB0&query=${searchQuery}`
-      : `https://localhost:7231/api/FileUploadAPI/D96C72A5-990B-497A-974A-14611C77EDB0/mockups`;
+      ? `https://localhost:7231/api/FileUploadAPI/search?userId=${user?.id}&query=${searchQuery}`
+      : `https://localhost:7231/api/FileUploadAPI/${user?.id}/mockups`;
         axios.get(url)
           .then(response => {
             const searchResults = response.data.map(mockup => ({
@@ -62,7 +62,7 @@ const NavbarComponent = ({ setMockups }) => {
                 </Navbar.Brand>
                 <div style={{ display: 'flex', gap: '10px' }}>
                     <button style={{ ...buttonStyle, background: 'transparent', color: '#fff', border: 'none' }}>Upload Mockup</button>
-                    <NavDropdown title={<span>George <img src={Avatar} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%', marginLeft: '10px' }} /></span>} id="user-menu-dropdown" style={{ ...buttonStyle, background: 'transparent', color: '#fff', border: 'none' }}>
+                    <NavDropdown title={<span>{user?.name} <img src={Avatar} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%', marginLeft: '10px' }} /></span>} id="user-menu-dropdown" style={{ ...buttonStyle, background: 'transparent', color: '#fff', border: 'none' }}>
                         <NavDropdown.Item href="#logout" onClick={handleLogout}>Logout</NavDropdown.Item>
                     </NavDropdown>
                 </div>

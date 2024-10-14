@@ -184,6 +184,12 @@
 
 .cardImg{
   height: 200px;
+  opacity:1;
+}
+
+.detailcardImg{
+  height: 500px;
+  opacity:1;
 }
 
 .active-button {

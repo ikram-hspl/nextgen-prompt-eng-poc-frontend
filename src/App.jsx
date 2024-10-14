@@ -11,6 +11,7 @@ import AdminDashboard from './pages/AdminDashboard';
 // import DashboardLayout from './Components/DashboardLayout';
 import ErrorBoundary from './Context/ErrorBoundry';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import MockupDetailsPage from './Components/MockupDetailsPage';
 
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           </Route>
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/mockup/:id" element={<MockupDetailsPage />} /> {/* Add route for MockupDetailsPage */}
         {/* <Route path="/temp" element={<DashboardLayout />} /> */}
         </Routes>
 

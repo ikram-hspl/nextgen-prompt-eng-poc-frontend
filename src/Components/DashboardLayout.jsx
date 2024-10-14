@@ -1,17 +1,12 @@
+// DashboardLayout.jsx
 import { useState, useEffect, useContext } from 'react';
-import {
-  Container, Navbar, Nav, Form, Button, Row, Col, Card, Badge, DropdownButton, Dropdown, Modal, ListGroup, Carousel
-} from 'react-bootstrap';
+import { Container, Navbar, Nav, Form, Button, Row, Col, Card, Badge, DropdownButton, Dropdown, Modal, ListGroup, Carousel } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom'; // Use useNavigate instead of useHistory
 import axios from 'axios';
 import './Dashboard.css';
-import { IconButton } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import UpdateIcon from '@mui/icons-material/Update';
-import DeleteIcon from '@mui/icons-material/Delete';
 import UploadMockupModal from './UploadMockupModal';
 import NavbarComponent from './Navbar';
 import GetAppIcon from '@mui/icons-material/GetApp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { AuthContext } from '../Context/AuthContext';
 
 const DashboardLayout = () => {
@@ -31,6 +26,7 @@ const DashboardLayout = () => {
   });
   const [selectedMockups, setSelectedMockups] = useState([]);
   const [activeButton, setActiveButton] = useState('');
+  const navigate = useNavigate(); // Use useNavigate hook
 
   // Fetch mockups on component mount
   useEffect(() => {
@@ -209,7 +205,7 @@ const DashboardLayout = () => {
   };
 
   const handleCheckboxChange = (e, mockupId) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Stop event propagation to prevent card click
     setSelectedMockups(prevSelected => {
       if (prevSelected.includes(mockupId)) {
         return prevSelected.filter(id => id !== mockupId);
@@ -217,6 +213,10 @@ const DashboardLayout = () => {
         return [...prevSelected, mockupId];
       }
     });
+  };
+
+  const handleCardClick = (mockup) => {
+    navigate(`/mockup/${mockup.id}`, { state: { mockup } });
   };
 
   return (
@@ -253,13 +253,14 @@ const DashboardLayout = () => {
         <Row className="mt-4">
           {mockups.map(mockup => (
             <Col sm={3} key={mockup.id} className="mb-3">
-              <Card className='template-card'>
+              <Card className='template-card' onClick={() => handleCardClick(mockup)}>
                 <div className="checkbox-container">
-                  <Form.Check 
-                    type="checkbox" 
-                    checked={selectedMockups.includes(mockup.id)} 
-                    onChange={(e) => handleCheckboxChange(e, mockup.id)} 
-                  />
+                <Form.Check 
+                  type="checkbox" 
+                  checked={selectedMockups.includes(mockup.id)} 
+                  onChange={(e) => handleCheckboxChange(e, mockup.id)} 
+                  onClick={(e) => e.stopPropagation()} // Stop event propagation to prevent card click
+                />
                 </div>
                 <Carousel>
                   {mockup.images.map((image, index) => (
@@ -285,46 +286,6 @@ const DashboardLayout = () => {
         </Row>
       </Container>
       <UploadMockupModal show={show} handleClose={handleClose} handleUpload={handleUpload} />
-      <Modal show={updateModalShow} onHide={() => setUpdateModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update Mockup</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleUpdateFormSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="Name"
-                value={updateForm.Name}
-                onChange={handleUpdateFormChange}
-                placeholder="Enter mockup name"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Domainname</Form.Label>
-              <Form.Control
-                type="text"
-                name="Domainname"
-                value={updateForm.Domainname}
-                onChange={handleUpdateFormChange}
-                placeholder="Enter domain name"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Subdomainname</Form.Label>
-              <Form.Control
-                type="text"
-                name="Subdomainname"
-                value={updateForm.Subdomainname}
-                onChange={handleUpdateFormChange}
-                placeholder="Enter subdomain name"
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">Update</Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };

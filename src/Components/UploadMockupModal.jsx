@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef,useContext } from 'react';
 import { Modal, Button, Form, ListGroup } from 'react-bootstrap';
 import axios from 'axios';
 import CloudUpload from "../assets/cloud-upload.svg";
 import TimesIcon from '@mui/icons-material/Close'
 import Editor from './Editor';
+import { AuthContext } from '../Context/AuthContext';
 
 const UploadMockupModal = ({ show, handleClose, onUpload }) => {
+  const { user } = useContext(AuthContext);
   const [mockups, setMockups] = useState([]);
   const [fields, setFields] = useState({
     title: '',
@@ -15,16 +17,13 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
     tags: []
   });
   const editorRef = useRef(null);
-
-  const userId = 'd96c72a5-990b-497a-974a-14611c77edb0';
-
   const tagOptions = ['Mobile', 'Web', 'Desktop', 'Tablet'];
 
   // Fetch mockup data on component mount
   useEffect(() => {
     const fetchMockups = async () => {
       try {
-        const response = await axios.get(`https://localhost:7231/api/FileUploadAPI/${userId}/mockups`);
+        const response = await axios.get(`https://localhost:7231/api/FileUploadAPI/${user.id}/mockups`);
         //setMockups(response.data);
       } catch (error) {
         console.error('Error fetching mockups:', error);
@@ -104,15 +103,19 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
 
       const newMockups = await Promise.all(uploadPromises);
       const formData = new FormData();
-        formData.append('files', mockups);
-        formData.append('Name', fields.title);
-      formData.append('Domainname', fields.domain );
-      formData.append('Subdomainname', fields.subdomain);
+      mockups.forEach((mockup, index) => {
+        formData.append('MockupFiles', mockup);
+      });
+        formData.append('ProjectTitle', fields.title);
+      formData.append('DomainName', fields.domain );
+      formData.append('SubdomainName', fields.subdomain);
+      formData.append(`ImageGroupId`, '');
+      formData.append('ProjectDescription',fields.description);
         fields.tags.forEach((tag) => {
           formData.append(`Tags`, tag);
         });
 
-      await axios.post(`https://localhost:7231/api/FileUploadAPI/upload?userId=${userId}`, formData, {
+      await axios.post(`https://localhost:7231/api/FileUploadAPI/upload?userId=${user.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -178,10 +181,13 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
               style={{ height: '50px' }}
             >
               <option value="">Select Domain</option>
-              <option value="HR">HR</option>
-              <option value="Finance">Finance</option>
-              <option value="IT">IT</option>
-              <option value="Marketing">Marketing</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Moodle">Moodle</option>
+              <option value="WordPress">WordPress</option>
+              <option value="Analytics">Analytics</option>
+              <option value="HRTech">HRTech</option>
+              <option value="EdTech">EdTech</option>
+              <option value="HealthTech">HealthTech</option>
             </Form.Control>
           </Form.Group>
           <Form.Group className="mb-3 ms-2 flex-grow-1">

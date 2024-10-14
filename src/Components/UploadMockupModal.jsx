@@ -1,9 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Modal, Button, Form, ListGroup } from 'react-bootstrap';
 import axios from 'axios';
+import CloudUpload from "../assets/cloud-upload.svg";
+import TimesIcon from '@mui/icons-material/Close'
+import Editor from './Editor';
 
 const UploadMockupModal = ({ show, handleClose, onUpload }) => {
   const [mockups, setMockups] = useState([]);
+  const [fields, setFields] = useState({
+    title: '',
+    domain: '',
+    subdomain: '',
+    description: '',
+    tags: []
+  });
+  const editorRef = useRef(null);
+
   const userId = 'd96c72a5-990b-497a-974a-14611c77edb0';
 
   const tagOptions = ['Mobile', 'Web', 'Desktop', 'Tablet'];
@@ -29,10 +41,9 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
       title: '',
       domain:'',
       subdomain:'',
-      
       tags: [] // Initialize as an empty array
     }));
-    setMockups(prevMockups => [...prevMockups, ...newMockups]);
+    setMockups(newFiles);
   };
 
   const handleInputChange = (index, e) => {
@@ -45,21 +56,28 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
   };
 
   const handleTagChange = (index, tag) => {
-    setMockups(prevMockups => 
-      prevMockups.map((mockup, i) => {
-        if (i === index) {
-          const updatedTags = mockup.tags.includes(tag)
-            ? mockup.tags.filter(t => t !== tag)
-            : [...mockup.tags, tag];
-          return { ...mockup, tags: updatedTags };
-        }
-        return mockup;
-      })
-    );
+    setFields((prevState) => ({ 
+      ...prevState, 
+      tags : fields.tags.includes(tag) ? fields.tags.filter(t => t !== tag) : [...fields.tags, tag]
+    }));
   };
 
   const handleRemoveFile = (index) => {
     setMockups(prevMockups => prevMockups.filter((_, i) => i !== index));
+  };
+
+  const handleChange = (e) => {
+    if (e.target) {
+       setFields((prevState) => ({ 
+        ...prevState, 
+        [e.target.name]: e.target.value 
+      }));
+    } else {
+      setFields((prevState) => ({ 
+        ...prevState, 
+        description : editorRef.current.root.innerHTML 
+      }));
+    }
   };
 
   const handleUpload = async () => {
@@ -76,32 +94,23 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
             resolve({
               ...mockup,
               image: e.target.result,
-              fileName: mockup.file.name
+              fileName: mockup.filename
             });
           };
-          reader.readAsDataURL(mockup.file);
+          reader.readAsDataURL(mockup);
         });
 
       });
 
       const newMockups = await Promise.all(uploadPromises);
-
       const formData = new FormData();
-      //formData.append('Name', mockup.title);
-      //formData.append('Domainname', mockup.domain );
-     // formData.append('Subdomainname', mockup.subdomain);
-     // formData.append('Name', "title");
-     // formData.append('Domainname', "HR" );
-     // formData.append('Subdomainname', "Data");
-      newMockups.forEach((mockup, index) => {
-        formData.append('files', mockup.file);
-        formData.append('Name', mockup.title);
-      formData.append('Domainname', mockup.domain );
-      formData.append('Subdomainname', mockup.subdomain);
-        mockup.tags.forEach(tag => {
-          formData.append(`Tags[${index}]`, tag);
+        formData.append('files', mockups);
+        formData.append('Name', fields.title);
+      formData.append('Domainname', fields.domain );
+      formData.append('Subdomainname', fields.subdomain);
+        fields.tags.forEach((tag) => {
+          formData.append(`Tags`, tag);
         });
-      });
 
       await axios.post(`https://localhost:7231/api/FileUploadAPI/upload?userId=${userId}`, formData, {
         headers: {
@@ -115,22 +124,128 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
     // window.location.reload();
 
     } catch (error) {
-      //console.error('Error uploading files:', error);
+    console.error('Error uploading files:', error);
      // alert('An error occurred while uploading the files.');
     }
     handleClose();
   };
 
+  const handleTagRemove = (index) => {
+    setFields((prevState) => ({ 
+      ...prevState, 
+      tags : prevState.tags.filter((t, i) => i !== index) 
+    }));
+  };
+
+  const handleTagInputKeyDown = (e) => {
+    if (e.key === 'Enter' && e.target.value.trim() !== '') {
+      const newTag = e.target.value.trim();
+      setFields((prevState) => ({ 
+        ...prevState, 
+        tags : [...prevState.tags, newTag] 
+      }));
+      e.target.value = '';
+    }
+  };
+
   return (
     <Modal show={show} onHide={handleClose} size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Upload Mockups</Modal.Title>
+        <Modal.Title>Add New Mock-up</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form.Group className="mb-3">
-          <Form.Label>Add files</Form.Label>
-          <Form.Control type="file" multiple onChange={handleFileChange} />
+          <Form.Label className="project-title-label" style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>PROJECT TITLE</Form.Label>
+          <Form.Control
+            type="text"
+            name='title'
+            className="project-title-input"
+            placeholder="Enter project title"
+            style={{ height: '50px' }}
+            value={fields.title}
+            onChange={handleChange}
+          />
         </Form.Group>
+        <div className="d-flex justify-content-between">
+          <Form.Group className="mb-3 me-2 flex-grow-1">
+            <Form.Label style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>DOMAIN</Form.Label>
+            <Form.Control
+              as="select"
+              name='domain'
+              value={fields.domain}
+              onChange={handleChange}
+              className="domain-select"
+              style={{ height: '50px' }}
+            >
+              <option value="">Select Domain</option>
+              <option value="HR">HR</option>
+              <option value="Finance">Finance</option>
+              <option value="IT">IT</option>
+              <option value="Marketing">Marketing</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group className="mb-3 ms-2 flex-grow-1">
+            <Form.Label style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>SUBDOMAIN</Form.Label>
+            <Form.Control
+              type="text"
+              name='subdomain'
+              onChange={handleChange}
+              placeholder="Enter Subdomain"
+              style={{ height: '50px' }}
+            />
+          </Form.Group>
+        </div>
+        <Form.Group className="mb-3">
+          <Form.Label style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>DESCRIPTION</Form.Label>
+            <Editor
+              ref={editorRef}
+              onTextChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label style={{ fontSize: '1.2rem', color: '#6E6E6E', fontWeight: 'bold' }}>Attach files</Form.Label>
+          <div
+            onClick={() => document.getElementById('file-input').click()}
+            onDrop={handleFileChange}
+            onDragOver={(e) => e.preventDefault()}
+            style={{
+              border: '2px dashed #C2C2C2',
+              borderRadius: '5px',
+              padding: '20px',
+              textAlign: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 4, alignItems: 'center' }}>
+              <div style={{ textAlign: 'left' }}>
+                <img src={CloudUpload} alt='' />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <p style={{ fontSize: '1rem', fontWeight: 'bold', color: '#6E6E6E', marginBottom: 1 }}>Upload Files</p>
+                <p style={{ fontSize: '0.875rem', color: '#6E6E6E', marginBottom: 1 }}>PDF, DOC, PPT, JPG, PNG</p>
+              </div>
+              <Form.Control id="file-input" type="file" multiple onChange={handleFileChange} style={{ display: 'none' }} />
+            </div>
+          </div>
+          </Form.Group>
+        <Form.Group className="mb-3">
+            <Form.Label style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>TAG</Form.Label>
+            <div className="tags-input-container" style={{ display: 'flex', padding: '0.8rem 0', gap: 4 }}>
+              {fields.tags?.map((tag, index) => (
+                <div key={index} className="tag-item" style={{ display: 'flex', padding: '0.8rem 1rem', backgroundColor: '#F5F5F5', borderRadius: '16px', alignItems: 'center' }}>
+                  <span style={{ marginRight: 2 }}>{tag}</span>
+                  <div><TimesIcon fontSize='0.5em' onClick={() => handleTagRemove(index)} className="tag-remove" /></div>
+                </div>
+              ))}
+              <Form.Control
+                type="text"
+                name='tags'
+                placeholder="Add Tags"
+                onKeyDown={(e) => handleTagInputKeyDown(e)}
+                style={{ border: 'none', outline: 'none', flex: 1 }}
+              />
+            </div>
+          </Form.Group>
         <ListGroup>
           {mockups.map((mockup, index) => (
             <ListGroup.Item key={index} className="mb-3">
@@ -138,36 +253,8 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
                 <strong>{mockup.file ? mockup.file.name : mockup.name}</strong>
                 <Button variant="outline-danger" size="sm" onClick={() => handleRemoveFile(index)}>Remove</Button>
               </div>
-              <Form.Group className="mb-2">
-                <Form.Control
-                  type="text"
-                  name="title"
-                  value={mockup.title || ''}
-                  onChange={(e) => handleInputChange(index, e)}
-                  placeholder="Enter mockup title"
-                />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Control
-                  type="text"
-                  name="domain"
-                  value={mockup.domain || ''}
-                  onChange={(e) => handleInputChange(index, e)}
-                  placeholder="Enter Domain"
-                />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Control
-                  type="text"
-                  name="subdomain"
-                  value={mockup.subdomain || ''}
-                  onChange={(e) => handleInputChange(index, e)}
-                  placeholder="Enter Subdomain"
-                />
-              </Form.Group>
-            
               <Form.Group>
-                <Form.Label>Tags</Form.Label>
+                <Form.Label style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>Tags</Form.Label>
                 <div>
                   {tagOptions.map((tag) => (
                     <Form.Check
@@ -175,7 +262,7 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
                       type="checkbox"
                       label={tag}
                       id={`tag-${index}-${tag}`}
-                      checked={mockup.tags ? mockup.tags.includes(tag) : false}
+                      checked={fields.tags ? fields.tags.includes(tag) : false}
                       onChange={() => handleTagChange(index, tag)}
                       key={tag}
                     />

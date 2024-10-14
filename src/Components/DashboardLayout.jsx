@@ -221,7 +221,7 @@ const DashboardLayout = () => {
 
   return (
     <div>
-      <NavbarComponent setMockups={setMockups} />
+      <NavbarComponent setMockups={setMockups} showModal={handleShow} />
       <Container style={{ marginTop: '60px' }}>
         <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
           <div className="d-flex flex-wrap">

@@ -7,7 +7,7 @@ import Logo from '../assets/logo.svg';
 import Avatar from '../assets/avatar.png';
 import { Navigate } from 'react-router-dom';
 
-const NavbarComponent = ({ setMockups }) => {
+const NavbarComponent = ({ setMockups, showModal }) => {
     const { user, logout } = useContext(AuthContext);
     const [selectedTab, setSelectedTab] = useState('visual-samples');
     const [searchQuery, setSearchQuery] = useState('');
@@ -61,7 +61,7 @@ const NavbarComponent = ({ setMockups }) => {
                     />
                 </Navbar.Brand>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <button style={{ ...buttonStyle, background: 'transparent', color: '#fff', border: 'none' }}>Upload Mockup</button>
+                    <button onClick={() => showModal(!0)} style={{ ...buttonStyle, background: 'transparent', color: '#fff', border: 'none' }}>Upload Mockup</button>
                     <NavDropdown title={<span>{user?.name} <img src={Avatar} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%', marginLeft: '10px' }} /></span>} id="user-menu-dropdown" style={{ ...buttonStyle, background: 'transparent', color: '#fff', border: 'none' }}>
                         <NavDropdown.Item href="#logout" onClick={handleLogout}>Logout</NavDropdown.Item>
                     </NavDropdown>

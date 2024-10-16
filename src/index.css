@@ -52,3 +52,30 @@ background: #FFFFFF 0% 0% no-repeat padding-box;
 border: 1px solid #FFFFFF;
 opacity: 1;
 }
+
+.carousel-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.carousel-indicator.active {
+  background: #007bff;
+}
+
+.carousel-thumbnail {
+  width: 250px; /* Adjust the width as needed */
+  height: 140px; /* Adjust the height as needed */
+  margin: 0 5px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.carousel-thumbnail.active {
+  border: 2px solid #007bff;
+}

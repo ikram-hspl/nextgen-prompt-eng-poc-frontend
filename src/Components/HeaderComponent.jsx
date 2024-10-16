@@ -4,13 +4,15 @@ import { AuthContext } from '../Context/AuthContext';
 import Logo from '../assets/logo.svg';
 import Avatar from '../assets/avatar.png';
 import HeaderBackground from '../assets/header-bg.png';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderComponent = ({ showModal }) => {
     const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         await logout();
-        <Navigate to="/" />;
+        navigate('/');
     };
 
     return (

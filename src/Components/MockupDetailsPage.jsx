@@ -3,14 +3,18 @@ import { useLocation } from 'react-router-dom';
 import { Container, Carousel, Row, Col } from 'react-bootstrap';
 import HeaderComponent from './HeaderComponent';
 import leftImg from '../assets/left.svg';
+
 const MockupDetailsPage = () => {
     const { state } = useLocation();
     const { mockup } = state;
     const [activeIndex, setActiveIndex] = useState(0);
+
     if (!mockup) return <div>Mockup not found</div>;
+
     const handleSelect = (selectedIndex) => {
         setActiveIndex(selectedIndex);
     };
+
     return (
         <Container fluid className="p-4">
             <HeaderComponent showModal={() => { }} />
@@ -23,7 +27,7 @@ const MockupDetailsPage = () => {
             <Row>
                 <Col md={8}>
                     <div className="bg-light p-3 rounded">
-                        <Carousel activeIndex={activeIndex} onSelect={handleSelect} className="mb-3">
+                        <Carousel activeIndex={activeIndex} onSelect={handleSelect} className="mb-3" interval={null}>
                             {mockup.images.map((image, index) => (
                                 <Carousel.Item key={index}>
                                     <img className="d-block w-100 detailcardImg" src={image} alt={`Slide ${index}`} />
@@ -56,8 +60,8 @@ const MockupDetailsPage = () => {
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry...</p>
                 </Col>
             </Row>
-
         </Container>
     );
 };
+
 export default MockupDetailsPage;

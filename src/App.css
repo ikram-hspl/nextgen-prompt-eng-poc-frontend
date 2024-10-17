@@ -137,12 +137,13 @@ opacity: 1;
   opacity: 1;
 }
 
-.template-card{
- background: #FFFFFF 0% 0% no-repeat padding-box;
- box-shadow: 0px 4px 4px #0000000A;
- opacity: 1;
- border: none !important;
- pointer-events: none;
+.template-card {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: 0px 4px 4px #0000000A;
+  opacity: 1;
+  border: none !important;
+  pointer-events: auto;
+  border-radius: 20px; /* Add this line to round the corners */
 }
 
 .template-card .template-img{

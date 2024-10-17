@@ -215,6 +215,10 @@ const DashboardLayout = () => {
     });
   };
 
+  const handleCarouselClick = (e) => {
+    e.stopPropagation(); // Prevent navigation
+  };
+
   const handleCardClick = (mockup) => {
     navigate(`/mockup/${mockup.id}`, { state: { mockup } });
   };
@@ -262,10 +266,10 @@ const DashboardLayout = () => {
                   onClick={(e) => e.stopPropagation()} // Stop event propagation to prevent card click
                 />
                 </div>
-                <Carousel>
+                <Carousel interval={null} onClick={handleCarouselClick}>
                   {mockup.images.map((image, index) => (
                     <Carousel.Item key={index}>
-                      <img className="d-block w-100 cardImg" src={image} alt={`Slide ${index}`} />
+                      <img className="d-block w-100 cardImg template-img" src={image} alt={`Slide ${index}`} />
                     </Carousel.Item>
                   ))}
                 </Carousel>

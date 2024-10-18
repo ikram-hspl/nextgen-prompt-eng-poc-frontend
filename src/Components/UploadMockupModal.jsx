@@ -150,6 +150,19 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
       e.target.value = '';
     }
   };
+  useEffect(() => {
+    if (show) {
+      setFields({
+        title: '',
+        domain: '',
+        subdomain: '',
+        description: '',
+        tags: []
+      });
+      setMockups([]);
+    }
+  }, [show]);
+  
 
   return (
     <Modal show={show} onHide={handleClose} size="lg">
@@ -236,11 +249,13 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
           </Form.Group>
         <Form.Group className="mb-3">
             <Form.Label style={{ fontSize: '0.875rem', color: '#6E6E6E', fontWeight: 'bold' }}>TAG</Form.Label>
-            <div className="tags-input-container" style={{ display: 'flex', padding: '0.8rem 0', gap: 4 }}>
+            <div className="tags-input-container" style={{ display: 'flex', padding: '0.8rem 0.5rem', gap: 4, border: '1px solid #C2C2C2', borderRadius: '16px', flexWrap: 'wrap' }}>
               {fields.tags?.map((tag, index) => (
-                <div key={index} className="tag-item" style={{ display: 'flex', padding: '0.8rem 1rem', backgroundColor: '#F5F5F5', borderRadius: '16px', alignItems: 'center' }}>
-                  <span style={{ marginRight: 2 }}>{tag}</span>
-                  <div><TimesIcon fontSize='0.5em' onClick={() => handleTagRemove(index)} className="tag-remove" /></div>
+                <div key={index} className="tag-item" style={{ display: 'flex', padding: '0.5rem 0.825rem', backgroundColor: '#F5F5F5', borderRadius: '16px', alignItems: 'center', justifyContent: 'center' }}>
+                  <span className='tags' style={{ marginRight: 3, marginTop: '-2px' }}>{tag}</span>
+                  <div className='close' style={{ background: '#C2C2C2 0% 0% no-repeat padding-box', borderRadius: '50%', display: 'flex', height: '20px', width: '20px', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
+                    <TimesIcon fontSize='0.5em' style={{ color: '#fff' }} onClick={() => handleTagRemove(index)} className="tag-remove" />
+                  </div>
                 </div>
               ))}
               <Form.Control
@@ -248,7 +263,7 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
                 name='tags'
                 placeholder="Add Tags"
                 onKeyDown={(e) => handleTagInputKeyDown(e)}
-                style={{ border: 'none', outline: 'none', flex: 1 }}
+                style={{ border: 'none', outline: 'none', flex: 1, boxShadow: 'none' }}
               />
             </div>
           </Form.Group>
@@ -280,8 +295,8 @@ const UploadMockupModal = ({ show, handleClose, onUpload }) => {
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>Close</Button>
-        <Button variant="primary" onClick={handleUpload}>Upload</Button>
+        <Button variant="secondary" style={{ backgroundColor: 'transparent', color: '#6E6E6E' }} onClick={handleClose}>Close</Button>
+        <Button style={{ backgroundColor: '#6C67E1', borderColor: '#6C67E1' }} onClick={handleUpload}>Add</Button>
       </Modal.Footer>
     </Modal>
   );

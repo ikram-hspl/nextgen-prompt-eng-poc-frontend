@@ -43,7 +43,7 @@ const DashboardLayout = () => {
   }, [sortOption]);
 
   const fetchMockups = (userId) => {
-    axios.get(`https://localhost:7231/api/FileUploadAPI/${userId}/mockups`)
+    axios.get(`https://hxstudiofileupload.azurewebsites.net/api/FileUploadAPI/${userId}/mockups`)
       .then(response => {
         const fetchedMockups = response.data.map(mockup => ({
           id: mockup.id,
@@ -83,9 +83,9 @@ const DashboardLayout = () => {
     setSortOption(sort);
     let apiUrl;
     if (sort === 'Alphabetically') {
-      apiUrl = `https://localhost:7231/api/FileUploadAPI/alphabetical?userId=${user.id}`;
+      apiUrl = `https://hxstudiofileupload.azurewebsites.net/api/FileUploadAPI/alphabetical?userId=${user.id}`;
     } else {
-      apiUrl = `https://localhost:7231/api/FileUploadAPI/recent?userId=${user.id}`;
+      apiUrl = `https://hxstudiofileupload.azurewebsites.net/api/FileUploadAPI/recent?userId=${user.id}`;
     }
 
     axios.get(apiUrl)
@@ -108,7 +108,7 @@ const DashboardLayout = () => {
 
   const handleDomainFilter = (domainName) => {
     setActiveButton(domainName);
-    axios.get(`https://localhost:7231/api/FileUploadAPI/searchByDomain?userId=${user.id}&domainName=${domainName}`)
+    axios.get(`https://hxstudiofileupload.azurewebsites.net/api/FileUploadAPI/searchByDomain?userId=${user.id}&domainName=${domainName}`)
       .then(response => {
         const filteredMockups = response.data.map(mockup => ({
           id: mockup.id,
@@ -128,7 +128,7 @@ const DashboardLayout = () => {
   };
 
   const handleDelete = (mockup) => {
-    axios.delete(`https://localhost:7231/api/FileUploadAPI/delete/${mockup.id}`)
+    axios.delete(`https://hxstudiofileupload.azurewebsites.net/api/FileUploadAPI/delete/${mockup.id}`)
       .then(() => {
         setMockups(prevMockups => prevMockups.filter(item => item.id !== mockup.id));
         console.log('Mockup deleted successfully');
@@ -183,7 +183,7 @@ const DashboardLayout = () => {
     formData.append('Image', updateForm.Image);
 
     if (selectedMockup) {
-      axios.put(`https://localhost:7231/api/FileUploadAPI/update/${selectedMockup.id}`, formData, {
+      axios.put(`https://hxstudiofileupload.azurewebsites.net/api/FileUploadAPI/update/${selectedMockup.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

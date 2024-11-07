@@ -220,7 +220,6 @@ const DashboardLayout = () => {
         return mockupIds;
       }
     });
-    console.log('selected', selected);
     setSelectedMockupsForDownload(selected);
   };
 

@@ -48,8 +48,6 @@ await Promise.all(mockups.flatMap(mockup => ['https://picsum.photos/id/866/536/3
 
 const generatePdf = async (mockups) => {
     const allImages = []
-    
-    console.log('mockups', mockups);
     if (mockups.length) {
         await Promise.all(mockups.flatMap(mockup => mockup.images.map(preloadImage)));
         const htmlString = mockups.map(mockup => {

@@ -1,6 +1,6 @@
 import html2pdf from "html2pdf.js";
 
-/* const loadImagesAsync = (images) => {
+const preloadImage = (images) => {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.crossOrigin = "Anonymous"; // Enable cross-origin if needed
@@ -11,45 +11,16 @@ import html2pdf from "html2pdf.js";
           canvas.height = img.height;
           ctx.drawImage(img, 0, 0);
           const dataUrl = canvas.toDataURL('image/png'); // Convert to base64
-          resolve(dataUrl); // Resolve with base64 string
+          resolve({url: images, data: dataUrl}); // Resolve with base64 string
         };
         img.onerror = () => reject('Error loading image: ' + images);
         img.src = images; // Trigger image loading
       });
 }; 
-loadImagesAsync(allImages).then(() => {
-            // All images are loaded, now generate the PDF
-        html2pdf().set(pdfOptions).from(element).save();
-
-        }).catch(error => {
-            console.error("Error loading images:", error);
-        });
-*/
-
-const preloadImage = (url) => {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = url;
-        img.crossOrigin = "Anonymous"; // Enable cross-origin for public URLs if needed
-        img.onload = () => resolve(url); // Resolve when the image is loaded
-        img.onerror = reject;
-    });
-};
-
-/* 
-await Promise.all(mockups.flatMap(mockup => ['https://picsum.photos/id/866/536/354.jpg'].map(preloadImage)));
- ${
-    ['https://picsum.photos/id/866/536/354.jpg'].map(image => {
-        // allImages.push(image);
-        return `<img src="https://picsum.photos/id/866/536/354.jpg" alt="Mockup Image" style="width: 100%; margin-bottom: 10px;"/>`
-    }).join('')
-}
-*/
 
 const generatePdf = async (mockups) => {
-    const allImages = []
     if (mockups.length) {
-        await Promise.all(mockups.flatMap(mockup => mockup.images.map(preloadImage)));
+        const images = await Promise.all(mockups.flatMap(mockup => mockup.images.map(i => preloadImage(i))));
         const htmlString = mockups.map(mockup => {
             const htmlString =  `
                 <div class="container-fluid p-4" style="page-break-after: always;">
@@ -64,7 +35,7 @@ const generatePdf = async (mockups) => {
                                 ${
                                     mockup.images.map(image => {
                                         // allImages.push(image);
-                                        return `<img src="${image}" alt="Mockup Image" style="width: 100%; margin-bottom: 10px;"/>`
+                                        return `<img src="${images.find(i =>i.url === image).data}" alt="Mockup Image" style="width: 100%; margin-bottom: 10px;"/>`
                                     }).join('')
                                 }
                             </div >
